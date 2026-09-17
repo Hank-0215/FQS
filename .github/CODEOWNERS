@@ -2,5 +2,5 @@
 * @yaham0215
 
 # 這兩個檔案 AI 可以改，所以不強制要你
-/ai_allowed/1.md @yaham0215
-/ai_allowed/2.md @yaham0215
+/backtests/summary.csv @yaham0215
+/strategies/_TEMPLATE.md @yaham0215
