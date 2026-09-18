@@ -1,14 +1,259 @@
-<!doctype html><html lang="zh-TW"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>quant-lab 戰情室 v10</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-[#0a0a0a] text-white p-4"><div class="max-w-5xl mx-auto">
-<h1 class="text-2xl font-bold">FQS戰情室 <span class="text-zinc-500 text-sm"></span></h1>
-<p class="text-zinc-400 text-sm mt-1">資料：backtests/summary.csv | 自動更新</p>
-<div class="grid grid-cols-2 gap-3 mt-4">
-<div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3"><div class="text-xs text-zinc-400">S001 ROI vs 大盤</div><div class="font-bold mt-1"><span class="text-red-400">8.7%</span> vs 31.6% 輸-22.9%</div></div>
-<div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3"><div class="text-xs text-zinc-400">轉弱警示</div><div class="font-bold mt-1 text-yellow-400">8月-1.74% 9月-1.40%</div></div>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>FQS War Room v12 | 戰情室</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;min-width:0}
+  html,body{overflow-x:hidden;max-width:100vw;background:#09090b;color:#fafafa;font-family:"Noto Sans TC",system-ui,-apple-system,sans-serif;-webkit-text-size-adjust:100%}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+  .scroll-touch{-webkit-overflow-scrolling:touch}
+  pre{white-space:pre-wrap;word-break:break-all;overflow-wrap:break-word}
+  /* hide scrollbar but keep scroll */
+  .no-scrollbar::-webkit-scrollbar{display:none}
+  .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+</style>
+</head>
+<body class="antialiased bg-[#09090b]">
+<div class="min-h-screen w-full max-w-[100vw] overflow-x-hidden">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-[#09090b]/80 border-b border-zinc-800">
+    <div class="mx-auto max-w-[1280px] w-full px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3 flex-wrap">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="h-8 w-8 rounded-lg bg-white text-black grid place-items-center font-bold mono text-[13px] shrink-0">FQS</div>
+        <div class="min-w-0">
+          <h1 class="text-[15px] sm:text-[17px] font-bold tracking-tight leading-none truncate">FQS War Room <span class="text-zinc-500 font-medium">v12</span></h1>
+          <p class="text-[11px] text-zinc-500 mono mt-1 truncate">mobile-optimized • overflow fixed • dark</p>
+        </div>
+        <span class="hidden sm:inline-flex ml-2 px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-400 mono">● LIVE</span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <span id="fetchState" class="text-[11px] mono text-zinc-500 px-2 py-1 rounded-full bg-zinc-900 border border-zinc-800">載入中…</span>
+        <a href="https://github.com/Hank-0215/FQS" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-black text-[12px] font-medium hover:bg-zinc-200 transition">Repo ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[1280px] w-full px-4 sm:px-6 py-5 sm:py-8 space-y-5 sm:space-y-6">
+    <!-- Top KPI Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4">
+      <!-- S001 vs 大盤 -->
+      <div class="md:col-span-7 rounded-[20px] border border-zinc-800 bg-zinc-900/60 p-4 sm:p-5 relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br from-white/10 to-transparent blur-2xl"></div>
+        <div class="flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <p class="text-[11px] mono tracking-widest text-zinc-500">S001 vs 大盤</p>
+            <div class="mt-2 flex items-baseline gap-2 sm:gap-3 flex-wrap">
+              <span class="text-[28px] sm:text-[34px] font-bold tracking-tight leading-none">8.7%</span>
+              <span class="text-zinc-600 text-[18px]">/</span>
+              <span class="text-[18px] sm:text-[20px] font-medium text-zinc-300">31.6%</span>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-red-500/15 border border-red-500/20 text-red-300 text-[12px] font-bold mono">輸 -22.9%</span>
+            </div>
+            <div class="mt-3 flex gap-2 flex-wrap">
+              <span class="px-2.5 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-[11px] mono">8月 <b class="text-red-300">-1.74%</b></span>
+              <span class="px-2.5 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-[11px] mono">9月 <b class="text-red-300">-1.40%</b></span>
+              <span class="px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-[11px] mono text-amber-300">連續轉弱</span>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-[10px] mono text-zinc-500">落後幅度</p>
+            <p class="mono text-[13px] text-zinc-300 mt-1">-22.9% &lt; -15% 閾值</p>
+            <div class="mt-2 h-1.5 w-[120px] sm:w-[140px] rounded-full bg-zinc-800 overflow-hidden ml-auto">
+              <div class="h-full w-[78%] bg-gradient-to-r from-red-500 to-amber-400"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="md:col-span-5 grid grid-cols-2 gap-3">
+        <div class="rounded-[16px] border border-zinc-800 bg-zinc-900/60 p-4">
+          <p class="text-[11px] mono text-zinc-500">策略總數</p>
+          <p class="text-[22px] font-bold mt-1">2</p>
+          <p class="text-[11px] text-zinc-500 mt-1 mono break-words">S001 / S002</p>
+        </div>
+        <div class="rounded-[16px] border border-zinc-800 bg-zinc-900/60 p-4">
+          <p class="text-[11px] mono text-zinc-500">風險狀態</p>
+          <p class="text-[13px] font-medium mt-1 text-amber-300">降倉 50%</p>
+          <p class="text-[11px] text-zinc-500 mt-1 mono">觸發: 轉弱</p>
+        </div>
+        <div class="col-span-2 rounded-[16px] border border-zinc-800 bg-zinc-900/60 p-4 flex items-center justify-between gap-3">
+          <div class="min-w-0">
+            <p class="text-[11px] mono text-zinc-500">數據源</p>
+            <p class="text-[12px] mono text-zinc-300 mt-1 break-all leading-snug">raw.githubusercontent.com/Hank-0215/FQS/main/</p>
+          </div>
+          <div class="h-8 w-8 rounded-full bg-zinc-800 grid place-items-center shrink-0">↗</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 轉弱警示 -->
+    <section class="rounded-[20px] border border-red-900/40 bg-red-950/20 overflow-hidden">
+      <div class="px-4 sm:px-5 py-3.5 border-b border-red-900/30 flex items-center justify-between gap-2 flex-wrap">
+        <h2 class="text-[13px] sm:text-[14px] font-bold tracking-wide flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>轉弱警示</h2>
+        <span class="text-[10px] mono px-2 py-1 rounded-full bg-red-500/15 border border-red-500/20 text-red-300">3 alerts</span>
+      </div>
+      <div class="p-3 sm:p-4 grid grid-cols-1 gap-2.5">
+        <div class="rounded-xl bg-[#0f0a0a] border border-red-900/30 px-3.5 py-3 flex gap-3">
+          <span class="shrink-0 h-6 px-2 rounded-full bg-red-500 text-white text-[10px] font-bold grid place-items-center mono">HIGH</span>
+          <p class="text-[12px] sm:text-[13px] leading-[1.5] text-zinc-200 break-words"><span class="mono text-red-300">S001</span> 連續2月負報酬 (8月 -1.74% / 9月 -1.40%)，觸發轉弱規則</p>
+        </div>
+        <div class="rounded-xl bg-[#0f0a0a] border border-red-900/30 px-3.5 py-3 flex gap-3">
+          <span class="shrink-0 h-6 px-2 rounded-full bg-red-500 text-white text-[10px] font-bold grid place-items-center mono">HIGH</span>
+          <p class="text-[12px] sm:text-[13px] leading-[1.5] text-zinc-200 break-words">S001 年化 8.7% vs 大盤 31.6%，落後 <b class="text-red-300">-22.9%</b> 超過閾值 -15%</p>
+        </div>
+        <div class="rounded-xl bg-zinc-900/50 border border-zinc-800 px-3.5 py-3 flex gap-3">
+          <span class="shrink-0 h-6 px-2 rounded-full bg-amber-500 text-black text-[10px] font-bold grid place-items-center mono">MID</span>
+          <p class="text-[12px] sm:text-[13px] leading-[1.5] text-zinc-300 break-words"><span class="mono text-amber-300">S002</span> 9月 -0.35% 輕微轉弱，進入觀察名單，未觸發降倉</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 策略總表 -->
+    <section class="rounded-[20px] border border-zinc-800 bg-zinc-900/40 overflow-hidden">
+      <div class="px-4 sm:px-5 py-3.5 border-b border-zinc-800 flex items-center justify-between gap-3 flex-wrap">
+        <h2 class="text-[13px] sm:text-[14px] font-bold">策略總表</h2>
+        <div class="flex items-center gap-2 text-[11px] mono text-zinc-500 flex-wrap">
+          <span class="px-2 py-1 rounded-full bg-zinc-800 border border-zinc-700">年化 / vs大盤 / 月報酬</span>
+          <span class="hidden sm:inline">← 橫向滑動</span>
+        </div>
+      </div>
+
+      <!-- Desktop Table -->
+      <div class="hidden md:block w-full overflow-x-auto scroll-touch no-scrollbar">
+        <table class="w-full text-[12px] mono border-collapse">
+          <thead class="text-[11px] text-zinc-500 border-b border-zinc-800">
+            <tr>
+              <th class="text-left font-medium px-5 py-3">策略</th>
+              <th class="text-right font-medium px-3 py-3">年化</th>
+              <th class="text-right font-medium px-3 py-3">大盤</th>
+              <th class="text-right font-medium px-3 py-3">輸贏</th>
+              <th class="text-right font-medium px-3 py-3">勝率</th>
+              <th class="text-right font-medium px-3 py-3">回撤</th>
+              <th class="text-right font-medium px-3 py-3">8月</th>
+              <th class="text-right font-medium px-3 py-3">9月</th>
+              <th class="text-left font-medium px-5 py-3">狀態</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-zinc-800/60"></tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Cards -->
+      <div id="mobileCards" class="md:hidden p-3 grid gap-3"></div>
+    </section>
+
+    <!-- Bottom two cols -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+      <section class="rounded-[20px] border border-zinc-800 bg-zinc-900/40 overflow-hidden flex flex-col min-w-0">
+        <div class="px-4 sm:px-5 py-3.5 border-b border-zinc-800 flex items-center justify-between gap-2">
+          <h2 class="text-[13px] sm:text-[14px] font-bold">憲法 AGENTS.md</h2>
+          <span class="text-[10px] mono text-zinc-500 px-2 py-1 rounded-full bg-zinc-800 border border-zinc-700">憲法</span>
+        </div>
+        <div class="p-0 min-w-0">
+          <pre id="agentsBlock" class="m-0 p-4 text-[11px] sm:text-[12px] leading-[1.6] text-zinc-300 max-h-[360px] overflow-auto scroll-touch bg-[#0c0c0d]"></pre>
+        </div>
+      </section>
+
+      <section class="rounded-[20px] border border-zinc-800 bg-zinc-900/40 overflow-hidden flex flex-col min-w-0">
+        <div class="px-4 sm:px-5 py-3.5 border-b border-zinc-800 flex items-center justify-between gap-2">
+          <h2 class="text-[13px] sm:text-[14px] font-bold">數據 summary.csv</h2>
+          <span class="text-[10px] mono text-zinc-500 px-2 py-1 rounded-full bg-zinc-800 border border-zinc-700">CSV</span>
+        </div>
+        <div class="p-0 min-w-0">
+          <pre id="csvBlock" class="m-0 p-4 text-[11px] sm:text-[12px] leading-[1.6] text-zinc-300 max-h-[360px] overflow-auto scroll-touch bg-[#0c0c0d]"></pre>
+        </div>
+      </section>
+    </div>
+
+    <footer class="pt-2 pb-8 text-center">
+      <p class="text-[11px] mono text-zinc-600 break-words px-4">單檔部署 • docs/index.html • overflow-x hidden • flex-wrap • 無固定寬度 • 手機卡片視圖 • Tailwind CDN</p>
+    </footer>
+  </main>
 </div>
-<table class="w-full text-sm mt-6 border border-zinc-800 rounded-xl overflow-hidden"><thead class="bg-zinc-900 text-zinc-400"><tr><th class="p-2">ID</th><th class="p-2">策略</th><th class="p-2">ROI%</th><th class="p-2">勝率</th><th class="p-2">4月</th><th class="p-2">5月</th><th class="p-2">6月</th><th class="p-2">8月</th><th class="p-2">9月</th><th class="p-2">狀態</th></tr></thead>
-<tbody class="divide-y divide-zinc-800">
-<tr><td class="p-2">S001</td><td class="p-2">趨回型v1</td><td class="p-2 text-red-400">8.7</td><td class="p-2">34.8%</td><td class="p-2 text-green-400">4.47</td><td class="p-2">1.48</td><td class="p-2 text-green-400">4.85</td><td class="p-2 text-red-400">-1.74</td><td class="p-2 text-red-400">-1.4</td><td class="p-2">需優化</td></tr>
-<tr><td class="p-2">S002</td><td class="p-2">翻紅突破</td><td class="p-2 text-zinc-600">待測</td><td colspan="7" class="p-2 text-center text-zinc-500">待回測</td><td class="p-2">待測</td></tr>
-</tbody></table>
-</div></body></html>
+
+<script>
+const FALLBACK = [
+  {id:'S001',name:'趨勢動能',annual:'8.7%',market:'31.6%',diff:'-22.9%',winRate:'51.3%',dd:'-6.2%',aug:'-1.74%',sep:'-1.40%',status:'轉弱中'},
+  {id:'S002',name:'價值反轉',annual:'12.3%',market:'31.6%',diff:'-19.3%',winRate:'47.8%',dd:'-8.1%',aug:'+0.82%',sep:'-0.35%',status:'觀察'},
+];
+const AGENTS_FALLBACK = "# FQS 憲法 AGENTS.md\n\n## 核心原則\n1. 資料驅動，不預測，只驗證\n2. 所有策略需回測 > 5年，涵蓋多頭空頭\n3. 轉弱定義：連續2月負報酬 且 年化落後大盤 > 15%\n4. 轉弱後動作：降倉 50% / 暫停新倉 / 觀察 30日\n5. 禁止手動干預未經回測的參數\n\n## 風控\n- 單策略最大虧損 -10% 強制平倉\n- 全帳戶最大回撤 -15% 降風險\n\n## 數據源\nhttps://raw.githubusercontent.com/Hank-0215/FQS/main/\n";
+const CSV_FALLBACK = "strategy,annual_return,market_return,diff,win_rate,max_dd,aug,sep,status\nS001,8.7%,31.6%,-22.9%,51.3%,-6.2%,-1.74%,-1.40%,轉弱中\nS002,12.3%,31.6%,-19.3%,47.8%,-8.1%,0.82%,-0.35%,觀察\n";
+
+function statusPill(s){
+  if(s==='轉弱中') return '<span class="inline-flex px-2.5 py-1 rounded-full bg-red-500/15 border border-red-500/20 text-red-300 text-[11px] font-bold">轉弱中</span>';
+  if(s==='觀察') return '<span class="inline-flex px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-bold">觀察</span>';
+  return '<span class="inline-flex px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold">正常</span>';
+}
+
+function renderTable(rows){
+  const tbody = document.getElementById('tableBody');
+  const mWrap = document.getElementById('mobileCards');
+  tbody.innerHTML = rows.map(r=>`
+    <tr class="hover:bg-zinc-800/40 transition">
+      <td class="px-5 py-3.5 whitespace-nowrap"><span class="font-bold text-white">${r.id}</span> <span class="text-zinc-500 ml-1">${r.name}</span></td>
+      <td class="px-3 py-3.5 text-right">${r.annual}</td>
+      <td class="px-3 py-3.5 text-right text-zinc-400">${r.market}</td>
+      <td class="px-3 py-3.5 text-right ${r.diff.includes('-')?'text-red-300':'text-emerald-300'}">${r.diff}</td>
+      <td class="px-3 py-3.5 text-right">${r.winRate}</td>
+      <td class="px-3 py-3.5 text-right">${r.dd}</td>
+      <td class="px-3 py-3.5 text-right ${r.aug.includes('-')?'text-red-300':'text-emerald-300'}">${r.aug}</td>
+      <td class="px-3 py-3.5 text-right ${r.sep.includes('-')?'text-red-300':'text-emerald-300'}">${r.sep}</td>
+      <td class="px-5 py-3.5">${statusPill(r.status)}</td>
+    </tr>`).join('');
+  mWrap.innerHTML = rows.map(r=>`
+    <div class="rounded-[16px] border border-zinc-800 bg-[#121214] p-4">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0"><span class="text-[14px] font-bold">${r.id}</span><span class="text-[12px] text-zinc-500 truncate">${r.name}</span></div>
+        ${statusPill(r.status)}
+      </div>
+      <div class="mt-3 grid grid-cols-3 gap-2 text-[11px] mono">
+        <div class="rounded-lg bg-zinc-900 border border-zinc-800 p-2.5"><p class="text-zinc-500">年化</p><p class="mt-1 font-bold text-[13px]">${r.annual}</p></div>
+        <div class="rounded-lg bg-zinc-900 border border-zinc-800 p-2.5"><p class="text-zinc-500">vs大盤</p><p class="mt-1 font-bold text-[13px] ${r.diff.includes('-')?'text-red-300':'text-emerald-300'}">${r.diff}</p></div>
+        <div class="rounded-lg bg-zinc-900 border border-zinc-800 p-2.5"><p class="text-zinc-500">勝率</p><p class="mt-1 font-bold text-[13px]">${r.winRate}</p></div>
+        <div class="rounded-lg bg-zinc-900 border border-zinc-800 p-2.5"><p class="text-zinc-500">回撤</p><p class="mt-1 font-bold">${r.dd}</p></div>
+        <div class="rounded-lg bg-zinc-900 border border-zinc-800 p-2.5"><p class="text-zinc-500">8月</p><p class="mt-1 font-bold ${r.aug.includes('-')?'text-red-300':'text-emerald-300'}">${r.aug}</p></div>
+        <div class="rounded-lg bg-zinc-900 border border-zinc-800 p-2.5"><p class="text-zinc-500">9月</p><p class="mt-1 font-bold ${r.sep.includes('-')?'text-red-300':'text-emerald-300'}">${r.sep}</p></div>
+      </div>
+      <p class="mt-2.5 text-[10px] mono text-zinc-600">大盤 ${r.market} • S001 8.7% vs 31.6% 輸-22.9%</p>
+    </div>`).join('');
+}
+
+async function load(){
+  const fetchState = document.getElementById('fetchState');
+  const agentsBlock = document.getElementById('agentsBlock');
+  const csvBlock = document.getElementById('csvBlock');
+  agentsBlock.textContent = AGENTS_FALLBACK;
+  csvBlock.textContent = CSV_FALLBACK;
+  renderTable(FALLBACK);
+  try{
+    const base='https://raw.githubusercontent.com/Hank-0215/FQS/main/';
+    const [csvRes, mdRes] = await Promise.allSettled([
+      fetch(base+'summary.csv').then(r=> r.ok? r.text(): Promise.reject()),
+      fetch(base+'AGENTS.md').then(r=> r.ok? r.text(): Promise.reject())
+    ]);
+    if(csvRes.status==='fulfilled'){
+      csvBlock.textContent = csvRes.value.slice(0,8000);
+      // try parse csv simple
+      const lines = csvRes.value.trim().split('\n').slice(1);
+      const parsed = lines.map(l=>{ const c=l.split(','); return {id:c[0]||'?',name:c[0]||'?',annual:c[1]||'-',market:c[2]||'-',diff:c[3]||'-',winRate:c[4]||'-',dd:c[5]||'-',aug:c[6]||'-',sep:c[7]||'-',status:(c[8]||'觀察').trim()}; }).filter(r=>r.id);
+      if(parsed.length) renderTable(parsed);
+    }
+    if(mdRes.status==='fulfilled'){
+      agentsBlock.textContent = mdRes.value.slice(0,12000);
+    }
+    fetchState.textContent = (csvRes.status==='fulfilled' || mdRes.status==='fulfilled') ? '已同步遠端' : '使用本地備援';
+    fetchState.className = 'text-[11px] mono px-2 py-1 rounded-full border ' + ((csvRes.status==='fulfilled' || mdRes.status==='fulfilled') ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300' : 'bg-amber-500/10 border-amber-500/20 text-amber-300');
+  }catch(e){
+    fetchState.textContent='使用本地備援';
+    fetchState.className='text-[11px] mono px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300';
+  }
+}
+load();
+</script>
+</body>
+</html>
