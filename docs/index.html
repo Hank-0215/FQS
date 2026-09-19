@@ -7,66 +7,62 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05080f; --card:rgba(16,24,34,.96); --card2:#111c2d; --card3:#0d1726;
+  --bg:#05080f; --card:rgba(16,24,34,.96); --card2:#111c2d; --card3:#121f30;
   --border:rgba(80,140,255,.22); --border2:#1d2d44; --text:#e6eef8; --muted:#7a92b2; --muted2:#445a78;
-  --blue:#3b82ff; --blue-glow:rgba(59,130,255,.28);
-  --red:#ff4d5a; --green:#12d98a; --shadow:0 16px 48px rgba(0,0,0,.6);
+  --blue:#3b82ff; --blue-glow:rgba(59,130,255,.28); --red:#ff4d5a; --green:#12d98a;
+  --shadow:0 16px 48px rgba(0,0,0,.6);
 }
 [data-theme="light"]{
   --bg:#eef4ff; --card:rgba(255,255,255,.98); --card2:#ffffff; --card3:#e8eef8;
   --border:rgba(59,130,255,.22); --border2:#d4dfe9; --text:#0f1e33; --muted:#6b86a3; --muted2:#a3b8ce;
-  --blue:#2563eb; --blue-glow:rgba(59,130,255,.18);
-  --red:#e84550; --green:#0ebf7a; --shadow:0 12px 32px rgba(37,99,235,.14);
+  --blue:#2563eb; --blue-glow:rgba(59,130,255,.18); --red:#e84550; --green:#0ebf7a;
+  --shadow:0 12px 32px rgba(37,99,235,.14);
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;min-width:0}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',system-ui,sans-serif;min-height:100vh}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(800px at 20% -10%,var(--blue-glow),transparent 65%)}
 .mono{font-family:'IBM Plex Mono',monospace}
 .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
 .card{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--border);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05)}
-.icon-btn{width:38px;height:38px;border-radius:12px;background:var(--card2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
-.icon-btn:hover{border-color:var(--blue);box-shadow:0 0 18px var(--blue-glow)}
-.month-pill{position:relative;background:var(--card3)!important;border:1px solid var(--border2)!important;overflow:hidden}
-.month-pill::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--c)}
+.icon-btn{width:38px;height:38px;border-radius:12px;background:var(--card2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* FIX: 三塊不跑版 */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+.kpi-box{border-radius:16px;background:var(--card3);border:1px solid var(--border2);padding:12px 10px;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.kpi-label{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-val{font-size:15px;font-weight:700;margin-top:8px;white-space:nowrap;line-height:1.1}
+.kpi-sub{font-size:10px;color:var(--muted2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* FIX: 月度方塊乾淨底線 */
+.month-pill{flex:0 0 76px;height:56px;border-radius:12px;background:var(--card3)!important;border:1px solid var(--border2)!important;border-bottom:3px solid var(--c)!important;display:flex;flex-direction:column;justify-content:center;padding:8px 10px;min-width:0}
 </style>
 </head>
 <body>
-<div style="max-width:720px;margin:0 auto;padding:24px 16px 48px;position:relative">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
-    <div style="display:flex;align-items:center;gap:12px">
-      <div class="card" style="width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--blue-glow)"><div style="width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)"></div></div>
-      <div><div style="font-size:16px;font-weight:700;line-height:1.1">FQS War<br>Room</div><div class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.08em;margin-top:3px">STRATEGY COMMAND • DAILY SYNC</div></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <button id="themeBtn" class="icon-btn"><span id="themeIcon">☀️</span></button>
-      <div class="card mono" style="height:38px;padding:0 12px;border-radius:99px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;white-space:nowrap">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></div>
-        <span id="syncTime">--</span><span style="color:var(--muted);font-size:10px;font-weight:400">TPE</span>
-      </div>
-    </div>
+<div style="max-width:720px;margin:0 auto;padding:20px 14px 40px;position:relative">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:10px">
+    <div style="display:flex;align-items:center;gap:10px;min-width:0"><div class="card" style="width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--blue-glow);flex-shrink:0"><div style="width:11px;height:11px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)"></div></div><div style="min-width:0"><div style="font-size:15px;font-weight:700;line-height:1.1">FQS War<br>Room</div><div class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.06em;margin-top:2px">STRATEGY COMMAND • DAILY SYNC</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><button id="themeBtn" class="icon-btn"><span id="themeIcon">☀️</span></button><div class="card mono" style="height:36px;padding:0 10px;border-radius:99px;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;white-space:nowrap"><div style="width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0"></div><span id="syncTime">--</span><span style="color:var(--muted);font-size:9px;font-weight:400">TPE</span></div></div>
   </div>
 
-  <div style="position:relative;margin-bottom:18px">
-    <button id="dropBtn" class="card" style="width:100%;height:66px;border-radius:20px;padding:0 16px;display:flex;justify-content:space-between;align-items:center;text-align:left;cursor:pointer">
-      <div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px"><span id="selName" style="font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">載入中...</span><span id="selStatus" class="mono" style="font-size:10px;padding:3px 8px;border-radius:8px;border:1px solid;font-weight:600"></span></div><div class="mono" style="font-size:11px;color:var(--muted);margin-top:3px"><span id="selId"></span> • <span id="selPeriod"></span></div></div>
-      <div style="width:36px;height:36px;border-radius:50%;background:var(--card3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;margin-left:12px;color:var(--muted)">▼</div>
-    </button>
-    <div id="dropList" class="card" style="display:none;position:absolute;z-index:20;top:74px;width:100%;border-radius:20px;overflow:hidden"></div>
+  <div style="position:relative;margin-bottom:16px">
+    <button id="dropBtn" class="card" style="width:100%;height:62px;border-radius:18px;padding:0 14px;display:flex;justify-content:space-between;align-items:center;text-align:left;cursor:pointer;min-width:0"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:6px;min-width:0"><span id="selName" style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">載入中...</span><span id="selStatus" class="mono" style="font-size:9px;padding:2px 6px;border-radius:6px;border:1px solid;font-weight:600;flex-shrink:0"></span></div><div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span id="selId"></span> • <span id="selPeriod"></span></div></div><div style="width:32px;height:32px;border-radius:50%;background:var(--card3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;margin-left:8px;color:var(--muted);flex-shrink:0">▼</div></button>
+    <div id="dropList" class="card" style="display:none;position:absolute;z-index:20;top:70px;width:100%;border-radius:18px;overflow:hidden"></div>
   </div>
 
-  <div id="mainCard" class="card" style="border-radius:28px;padding:20px;margin-bottom:18px">
-    <div style="display:flex;justify-content:space-between"><div><div class="mono" style="font-size:11px;color:var(--muted);letter-spacing:.06em;white-space:nowrap">回測期間 • BACKTEST PERIOD</div><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><span id="mStartEnd" class="mono" style="font-size:13px;font-weight:700;background:var(--card3);border:1px solid var(--border2);padding:7px 14px;border-radius:99px;color:var(--text);white-space:nowrap"></span><span id="mPeriodShort" class="mono" style="font-size:11px;background:var(--card3);border:1px solid var(--border2);color:var(--muted);padding:5px 12px;border-radius:99px;white-space:nowrap"></span></div></div><div id="mTrades" class="mono" style="width:44px;height:44px;border-radius:14px;background:var(--card3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);font-weight:700"></div></div>
-    <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-      <div style="border-radius:18px;background:var(--card3);border:1px solid var(--border2);padding:14px"><div class="mono" style="font-size:11px;color:var(--muted);white-space:nowrap">年化 • ANNUAL</div><div id="mAnnual" class="mono" style="font-size:17px;font-weight:700;margin-top:8px"></div><div id="mMarket" class="mono" style="font-size:10px;color:var(--muted2);margin-top:4px;white-space:nowrap"></div></div>
-      <div style="border-radius:18px;background:var(--card3);border:1px solid var(--border2);padding:14px"><div class="mono" style="font-size:11px;color:var(--muted);white-space:nowrap">超額 • DIFF</div><div id="mDiff" class="mono" style="font-size:17px;font-weight:700;margin-top:8px"></div><div id="mDiffLabel" class="mono" style="font-size:10px;color:var(--muted2);margin-top:4px;white-space:nowrap"></div></div>
-      <div style="border-radius:18px;background:var(--card3);border:1px solid var(--border2);padding:14px"><div class="mono" style="font-size:11px;color:var(--muted);white-space:nowrap">勝率 / 回撤</div><div style="margin-top:8px"><span id="mWin" class="mono" style="font-size:17px;font-weight:700"></span></div><div class="mono" style="margin-top:6px;font-size:11px;white-space:nowrap"><span id="mDD"></span><span id="mTrades2" style="font-size:10px;color:var(--muted)"></span></div></div>
+  <div id="mainCard" class="card" style="border-radius:26px;padding:16px;margin-bottom:16px;overflow:hidden">
+    <div style="display:flex;justify-content:space-between;gap:8px"><div style="min-width:0"><div class="mono" style="font-size:10px;color:var(--muted);white-space:nowrap">回測期間 • BACKTEST PERIOD</div><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><span id="mStartEnd" class="mono" style="font-size:11px;font-weight:700;background:var(--card3);border:1px solid var(--border2);padding:6px 10px;border-radius:99px;color:var(--text);white-space:nowrap"></span><span id="mPeriodShort" class="mono" style="font-size:10px;background:var(--card3);border:1px solid var(--border2);color:var(--muted);padding:4px 8px;border-radius:99px;white-space:nowrap"></span></div></div><div id="mTrades" class="mono" style="width:40px;height:40px;border-radius:12px;background:var(--card3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);font-weight:700;flex-shrink:0"></div></div>
+
+    <div class="kpi-grid" style="margin-top:16px">
+      <div class="kpi-box"><div class="kpi-label mono">年化 • ANNUAL</div><div id="mAnnual" class="kpi-val mono"></div><div id="mMarket" class="kpi-sub mono"></div></div>
+      <div class="kpi-box"><div class="kpi-label mono">超額 • DIFF</div><div id="mDiff" class="kpi-val mono"></div><div id="mDiffLabel" class="kpi-sub mono"></div></div>
+      <div class="kpi-box"><div class="kpi-label mono">勝率 / 回撤</div><div id="mWin" class="kpi-val mono"></div><div class="kpi-sub mono"><span id="mDD"></span><span id="mTrades2"></span></div></div>
     </div>
-    <div style="margin-top:20px"><div class="mono" style="font-size:11px;color:var(--muted);margin-bottom:10px;white-space:nowrap">月度表現 • 獨立標籤</div><div id="mMonths" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:2px" class="no-scrollbar"></div></div>
+
+    <div style="margin-top:18px"><div class="mono" style="font-size:10px;color:var(--muted);margin-bottom:8px">月度表現 • 獨立標籤</div><div id="mMonths" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px" class="no-scrollbar"></div></div>
   </div>
 
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h2 style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap">全部策略 • 各自回測窗</h2><span id="totalCount" class="mono" style="font-size:10px;background:var(--card2);border:1px solid var(--border2);color:var(--muted);padding:5px 10px;border-radius:99px;white-space:nowrap"></span></div>
-  <div id="allList" style="display:flex;flex-direction:column;gap:12px"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px"><h2 style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap">全部策略 • 各自回測窗</h2><span id="totalCount" class="mono" style="font-size:9px;background:var(--card2);border:1px solid var(--border2);color:var(--muted);padding:4px 8px;border-radius:99px;white-space:nowrap"></span></div>
+  <div id="allList" style="display:flex;flex-direction:column;gap:10px"></div>
 </div>
 
 <script>
@@ -74,7 +70,7 @@ const MOCK=`strategy_id,strategy_name,start_date,end_date,annual,market,diff,win
 S001,20~100回檔乖離動能 v2,2026/03/01,2026/08/31,10.04,31.44,-21.4,35.5,-3.8,307,觀察中,2026/03:1.43|2026/04:3.75|2026/05:1.33|2026/06:5.05|2026/07:0.23|2026/08:-1.76`;
 
 function parseLine(l){let o=[],c='',q=false;for(let i=0;i<l.length;i++){let ch=l[i];if(ch=='"'){if(q&&l[i+1]=='"'){c+='"';i++;}else q=!q;}else if(ch==','&&!q){o.push(c.trim());c='';}else c+=ch;}o.push(c.trim());return o.map(s=>s.replace(/^"(.*)"$/,'$1'));}
-function parseMonth(t){t=t.trim();if(!t)return null;let k=t.lastIndexOf(':');if(k==-1)return null;let v=parseFloat(t.slice(k+1));if(isNaN(v))return null;let lab=t.slice(0,k);let m=lab.match(/(\d{1,2})月/);let sh=m?m[0]:lab;let m2=lab.match(/(\d{4})[\/-](\d{1,2})/);if(m2) sh=m2[2].padStart(2,'0')+'月';return{short:sh,value:v};}
+function parseMonth(t){t=t.trim();if(!t)return null;let k=t.lastIndexOf(':');if(k==-1)return null;let v=parseFloat(t.slice(k+1));if(isNaN(v))return null;let lab=t.slice(0,k);let m=lab.match(/(\d{4})[\/-](\d{1,2})/);let sh=m?m[2].padStart(2,'0')+'月':lab;return{short:sh,value:v};}
 function shortPeriod(s,e){let a=s.match(/(\d{4})[\/-](\d{1,2})/),b=e.match(/(\d{4})[\/-](\d{1,2})/);if(a&&b)return `${a[2].padStart(2,'0')}-${b[2].padStart(2,'0')}月`;return `${s}~${e}`;}
 function parseCSV(txt){
   let lines=txt.split(/\r?\n/).filter(x=>x.trim()); if(lines.length<2) return [];
@@ -116,9 +112,9 @@ function renderMain(){
   let mc=document.getElementById('mMonths'); mc.innerHTML='';
   s.months.forEach(m=>{
     let div=document.createElement('div');
-    div.className='month-pill card';
-    div.style.cssText=`flex:0 0 80px;height:62px;border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;--c:${m.value>=0?'var(--red)':'var(--green)'};`;
-    div.innerHTML=`<div class="mono" style="font-size:11px;color:var(--muted)">${m.short}</div><div class="mono" style="font-size:15px;font-weight:700;margin-top:4px;color:${m.value>=0?'var(--red)':'var(--green)'}">${m.value>=0?'+':''}${m.value.toFixed(2)}%</div>`;
+    div.className='month-pill';
+    div.style.setProperty('--c', m.value>=0?'var(--red)':'var(--green)');
+    div.innerHTML=`<div class="mono" style="font-size:10px;color:var(--muted)">${m.short}</div><div class="mono" style="font-size:13px;font-weight:700;margin-top:2px;color:${m.value>=0?'var(--red)':'var(--green)'}">${m.value>=0?'+':''}${m.value.toFixed(2)}%</div>`;
     mc.appendChild(div);
   });
 }
@@ -126,10 +122,10 @@ function renderList(){
   let cont=document.getElementById('allList'); cont.innerHTML='';
   strategies.forEach(s=>{
     let b=document.createElement('button');
-    b.style.cssText=`width:100%;text-align:left;border-radius:24px;padding:16px;background:var(--card);border:1px solid ${s.id===selectedId?'var(--border)':'var(--border2)'};cursor:pointer;`;
+    b.style.cssText=`width:100%;text-align:left;border-radius:20px;padding:14px;background:var(--card);border:1px solid ${s.id===selectedId?'var(--border)':'var(--border2)'};cursor:pointer;min-width:0`;
     b.onclick=()=>{selectedId=s.id;renderMain();renderList();window.scrollTo({top:0,behavior:'smooth'});};
-    let pills=s.months.map(m=>`<div class="month-pill" style="flex:0 0 66px;height:48px;border-radius:12px;background:var(--card3);border:1px solid var(--border2);padding:7px 9px;display:flex;flex-direction:column;justify-content:center;--c:${m.value>=0?'var(--red)':'var(--green)'}"><div class="mono" style="font-size:10px;color:var(--muted)">${m.short}</div><div class="mono" style="font-size:13px;font-weight:700;color:${m.value>=0?'var(--red)':'var(--green)'}">${m.value>=0?'+':''}${m.value.toFixed(2)}%</div></div>`).join('');
-    b.innerHTML=`<div style="display:flex;justify-content:space-between"><div><div style="font-size:13px;font-weight:600;color:var(--text)">${s.name}</div><div style="margin-top:6px;display:flex;gap:6px"><span class="mono" style="font-size:10px;background:var(--card3);border:1px solid var(--border2);padding:2px 6px;border-radius:6px;color:var(--muted)">${s.id}</span><span class="mono" style="font-size:10px;padding:2px 6px;border-radius:6px;border:1px solid ${s.status==='正常'?'rgba(18,217,138,.28)':s.status==='觀察中'?'rgba(255,174,0,.28)':'rgba(255,77,90,.28)'};background:${s.status==='正常'?'rgba(18,217,138,.14)':s.status==='觀察中'?'rgba(255,174,0,.14)':'rgba(255,77,90,.14)'};color:${s.status==='正常'?'var(--green)':s.status==='觀察中'?'#ffae00':'var(--red)'}">${s.status}</span></div></div><div style="text-align:right"><div class="mono" style="font-size:12px;font-weight:700;color:${s.diff>=0?'var(--red)':'var(--green)'}">${s.diff>0?'+':''}${s.diff.toFixed(1)}% <span style="font-size:10px;color:var(--muted);font-weight:400">超額</span></div><div class="mono" style="font-size:10px;color:var(--muted);margin-top:4px">${s.annual.toFixed(2)}% 年化 • ${s.trades}筆</div></div></div><div class="mono" style="margin-top:10px;font-size:11px;color:var(--muted);background:var(--card3);border:1px solid var(--border2);padding:5px 10px;border-radius:99px;display:inline-block">回測期間：${s.start_date}-${s.end_date}</div><div style="margin-top:12px;display:flex;gap:7px;overflow-x:auto" class="no-scrollbar">${pills}</div>`;
+    let pills=s.months.map(m=>`<div class="month-pill" style="flex:0 0 66px;height:46px;padding:6px 8px;--c:${m.value>=0?'var(--red)':'var(--green)'}"><div class="mono" style="font-size:9px;color:var(--muted)">${m.short}</div><div class="mono" style="font-size:12px;font-weight:700;color:${m.value>=0?'var(--red)':'var(--green)'}">${m.value>=0?'+':''}${m.value.toFixed(2)}%</div></div>`).join('');
+    b.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px"><div style="min-width:0"><div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div><div style="margin-top:6px;display:flex;gap:6px"><span class="mono" style="font-size:9px;background:var(--card3);border:1px solid var(--border2);padding:2px 6px;border-radius:6px;color:var(--muted)">${s.id}</span><span class="mono" style="font-size:9px;padding:2px 6px;border-radius:6px;border:1px solid ${s.status==='正常'?'rgba(18,217,138,.28)':s.status==='觀察中'?'rgba(255,174,0,.28)':'rgba(255,77,90,.28)'};background:${s.status==='正常'?'rgba(18,217,138,.14)':s.status==='觀察中'?'rgba(255,174,0,.14)':'rgba(255,77,90,.14)'};color:${s.status==='正常'?'var(--green)':s.status==='觀察中'?'#ffae00':'var(--red)'}">${s.status}</span></div></div><div style="text-align:right;flex-shrink:0"><div class="mono" style="font-size:11px;font-weight:700;color:${s.diff>=0?'var(--red)':'var(--green)'}">${s.diff>0?'+':''}${s.diff.toFixed(1)}% <span style="font-size:9px;color:var(--muted);font-weight:400">超額</span></div><div class="mono" style="font-size:9px;color:var(--muted);margin-top:3px">${s.annual.toFixed(2)}% 年化 • ${s.trades}筆</div></div></div><div class="mono" style="margin-top:8px;font-size:10px;color:var(--muted);background:var(--card3);border:1px solid var(--border2);padding:4px 8px;border-radius:99px;display:inline-block;white-space:nowrap">回測期間：${s.start_date}-${s.end_date}</div><div style="margin-top:10px;display:flex;gap:6px;overflow-x:auto" class="no-scrollbar">${pills}</div>`;
     cont.appendChild(b);
   });
   document.getElementById('totalCount').textContent=strategies.length+' 策略 • 每列獨立月份';
@@ -138,8 +134,8 @@ function renderDrop(){
   let l=document.getElementById('dropList'); l.innerHTML='';
   strategies.forEach(s=>{
     let b=document.createElement('button');
-    b.style.cssText=`width:100%;text-align:left;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border:none;background:${s.id===selectedId?'var(--card3)':'transparent'};cursor:pointer;color:var(--text)`;
-    b.innerHTML=`<div><div style="font-size:13px;color:var(--text)">${s.name}</div><div class="mono" style="font-size:11px;color:var(--muted)">${s.id} • ${s.periodShort}</div></div><div style="display:flex;gap:8px;align-items:center"><span class="mono" style="font-size:11px;font-weight:600;color:${s.diff>=0?'var(--red)':'var(--green)'}">${s.diff>0?'+':''}${s.diff.toFixed(1)}%</span><div style="width:8px;height:8px;border-radius:50%;background:${s.status==='正常'?'var(--green)':s.status==='觀察中'?'#ffae00':'var(--red)'}"></div></div>`;
+    b.style.cssText=`width:100%;text-align:left;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border:none;background:${s.id===selectedId?'var(--card3)':'transparent'};cursor:pointer;color:var(--text);min-width:0`;
+    b.innerHTML=`<div style="min-width:0"><div style="font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div><div class="mono" style="font-size:10px;color:var(--muted)">${s.id} • ${s.periodShort}</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><span class="mono" style="font-size:10px;font-weight:600;color:${s.diff>=0?'var(--red)':'var(--green)'}">${s.diff>0?'+':''}${s.diff.toFixed(1)}%</span><div style="width:7px;height:7px;border-radius:50%;background:${s.status==='正常'?'var(--green)':s.status==='觀察中'?'#ffae00':'var(--red)'}"></div></div>`;
     b.onclick=()=>{selectedId=s.id;document.getElementById('dropList').style.display='none';renderMain();renderList();};
     l.appendChild(b);
   });
