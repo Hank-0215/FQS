@@ -32,8 +32,8 @@ SXXX 編號規則
 > 例如：S010_量縮回檔
 ### 策略格式
 必須分開寫：進場策略、出場策略
-- 開盤前條件只可使用  [盤前條件庫](https://github.com/Hank-0215/FQS/tree/main/docs/strategies/_library_pre)內的條件，禁止自創
-- 盤中條件只可使用  [盤中條件庫](https://github.com/Hank-0215/FQS/tree/main/docs/strategies/_library_intraday)內的條件，禁止自創
+- 開盤前條件只可使用  [盤前條件庫](https://github.com/Hank-0215/FQS/blob/main/docs/strategies/_library_pre/開盤前策略條件庫.md)內的條件，禁止自創
+- 盤中條件只可使用  [盤中條件庫](https://github.com/Hank-0215/FQS/blob/main/docs/strategies/_library_intraday/盤中策略條件庫.md)內的條件，禁止自創
 ### 進場條件格式
 - 開盤前_符合全部:
 - 開盤前_符合部分N個: 
